@@ -8,6 +8,7 @@ import { errorHandler } from './middleware/error.middleware';
 import { notFoundMiddleware } from './middleware/not-found.middleware';
 import { requestLogger } from './middleware/requestLogger.middleware';
 import { configureDB } from './config/db';
+import { poemRouter } from './poem/poem.router';
 
 const app = express();
 dotenv.config();
@@ -25,11 +26,11 @@ app.use(cors());
 app.use(express.json());
 app.use(requestLogger) 
 app.use("/api/items", itemsRouter);
+app.use("/api/poem", poemRouter);
 
 
 app.use(errorHandler);
 app.use(notFoundMiddleware);
-
 
 
 /** Server Activation */
