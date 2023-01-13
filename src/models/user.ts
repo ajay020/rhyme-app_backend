@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, Model, model } from 'mongoose';
 import { IUser } from '../auth/auth.interface';
 import bcrypt from 'bcrypt';
 
@@ -9,13 +9,21 @@ import bcrypt from 'bcrypt';
 //   avatar?: string;
 // }
 
-const userSchema = new Schema<IUser>({
+interface IuserMthods {
+  correctPassword(candidatePassword:string, userPassword:string) : Promise< boolean>
+}
+
+type UserModel = Model<IUser,{}, IuserMthods>;
+
+const userSchema = new Schema<IUser, UserModel,IuserMthods>({
     name: { type: String, required: true },
     email: { type: String, required: true },
-    password: { type: String, required: true },
+    password: { type: String, required: true , select:false},
 
-    avatar: String
-});
+    avatar: String,
+    
+}
+);
 
 userSchema.pre("save", async function( next){
     // Only run this function if password was actually modified
@@ -30,4 +38,12 @@ userSchema.pre("save", async function( next){
 
 })
 
-export const User = model<IUser>('User', userSchema);
+// check if passwords are correct
+
+userSchema.method(
+  'correctPassword',
+  async function (candidatePassword:string, userPassword :string ){
+    return await bcrypt.compare(candidatePassword, userPassword);
+})
+
+export const User = model<IUser, UserModel>('User', userSchema);
