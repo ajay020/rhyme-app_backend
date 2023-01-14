@@ -1,9 +1,9 @@
-import { model, Schema, Model, Document, HydratedDocument } from 'mongoose';
+import { model, Schema, Model, Document, HydratedDocument, Types } from 'mongoose';
 
 interface IPoem{
     title:string;
     description:string ;
-    author:string,
+    author:Types.ObjectId,
     image?:string 
 }
 
@@ -17,7 +17,8 @@ const PoemSchema : Schema = new Schema<IPoem>({
     required:true 
   },
   author:{
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true
   },
   image:String

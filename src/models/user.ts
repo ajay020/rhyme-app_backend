@@ -10,18 +10,17 @@ import bcrypt from 'bcrypt';
 // }
 
 interface IuserMthods {
-  correctPassword(candidatePassword:string, userPassword:string) : Promise< boolean>
+  correctPassword(candidatePassword:string, userPassword:string) : Promise< boolean>;
+  changedPasswordAfter(JWTTimestamp:number | undefined) : boolean
 }
 
 type UserModel = Model<IUser,{}, IuserMthods>;
 
 const userSchema = new Schema<IUser, UserModel,IuserMthods>({
     name: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique:true },
     password: { type: String, required: true , select:false},
-
     avatar: String,
-    
 }
 );
 
@@ -45,5 +44,28 @@ userSchema.method(
   async function (candidatePassword:string, userPassword :string ){
     return await bcrypt.compare(candidatePassword, userPassword);
 })
+
+userSchema.method(
+  'changedPasswordAfter',
+  function(JWTTimestamp:number | undefined){
+
+    if (this.passwordChangedAt) {
+      let changedAt = `${this.passwordChangedAt.getTime()/1000}`; // convert to UTC seconds
+      const changedTimestamp = parseInt(changedAt,10);
+      
+      // console.log(changedTimestamp, JWTTimestamp);
+
+      if(JWTTimestamp){
+        return JWTTimestamp < changedTimestamp;
+      }
+
+      return false;
+    }
+  
+    // Password not changed
+    return false;
+  }
+)
+
 
 export const User = model<IUser, UserModel>('User', userSchema);
