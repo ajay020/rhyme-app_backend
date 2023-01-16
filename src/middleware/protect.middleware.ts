@@ -1,6 +1,5 @@
 import jwt, {JwtPayload} from 'jsonwebtoken'
 import { Request, Response, NextFunction } from "express"
-import { promisify } from 'util';
 import { User } from '../models/user';
 
 
@@ -19,12 +18,13 @@ export const protect = async (req: Request, res:Response, next:NextFunction) =>{
     // 2) Verify token
 
     let decoded ;
-
+    
     if(process.env.JWT_SECRET){
         decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
     }else{
         return res.status(400).json("No Secret key found");
     } 
+
 
     // 3) Check if user still exists
     const foundUser = await User.findById(decoded.id);
