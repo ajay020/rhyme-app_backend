@@ -21,17 +21,17 @@ const userSchema = new Schema<IUser, UserModel, IuserMthods>({
   avatar: { type: String },
   passwordResetToken: { type: String },
   passwordResetExpires: { type: Date },
+  passwordChangedAt: { type: Number },
 });
 
 userSchema.pre("save", async function (next) {
   // Only run this function if password was actually modified
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password" || this.isNew)) return next();
 
   // Hash the password with cost of 12
   this.password = await bcrypt.hash(this.password, 12);
+  this.passwordChangedAt = Date.now() - 1000;
 
-  // Delete password confirm field
-  // this.passwordConfirm = undefined;
   next();
 });
 
