@@ -5,6 +5,8 @@ export interface IUser{
     email: string;
     password:string;
     avatar?: string;
+    passwordResetToken?: string,
+    passwordResetExpires?: Date
 }
 export interface ILoginUser{
     email: string;

@@ -1,5 +1,4 @@
-import express, { Request, Response } from "express";
-import { protect } from "../middleware/protect.middleware";
+import  { Request, Response } from "express";
 import { Poem } from "../models/poem";
 import { PoemType } from "./poem.interface";
 
