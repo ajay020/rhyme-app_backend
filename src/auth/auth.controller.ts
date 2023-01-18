@@ -162,7 +162,32 @@ export const updatePassword = async (req: Request, res: Response) => {
     res.status(500).json(error.message);
   }
 };
-export const updateMe = async (req: Request, res: Response) => {};
+export const updateMe = async (req: Request, res: Response) => {
+  try {
+    // 1) Create error if user POSTS password data
+    if (req.body.password || req.body.passwordConfirm) {
+      return res.status(400).json("This route is not for password updates!");
+    }
+
+    // 2) Filter out unwanted field names
+    // const filteredBody = filterObj(req.body, "name", "email");
+
+    // 3) Update user document
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        user: updatedUser,
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json(error.message);
+  }
+};
 export const deleteMe = async (req: Request, res: Response) => {};
 
 // generate token
@@ -175,3 +200,15 @@ function generateToken(id: Types.ObjectId) {
   });
   return token;
 }
+
+// const filterObj = (obj: Partial<IUser>, ...allowedFields: string[]) => {
+//   let newObj: Partial<IUser> = {};
+
+//   Object.keys(obj).forEach((el) => {
+//     if (allowedFields.includes(el)) {
+//       newObj[el as keyof typeof newObj] = obj[el as keyof typeof obj];
+//     }
+//   });
+
+//   return newObj;
+// };
