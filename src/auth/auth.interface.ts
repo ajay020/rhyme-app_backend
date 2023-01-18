@@ -8,6 +8,7 @@ export interface IUser {
   passwordResetToken?: string;
   passwordResetExpires?: Date;
   passwordChangedAt?: number;
+  active: boolean;
 }
 export interface ILoginUser {
   email: string;

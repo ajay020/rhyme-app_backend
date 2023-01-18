@@ -22,6 +22,11 @@ const userSchema = new Schema<IUser, UserModel, IuserMthods>({
   passwordResetToken: { type: String },
   passwordResetExpires: { type: Date },
   passwordChangedAt: { type: Number },
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 });
 
 userSchema.pre("save", async function (next) {
@@ -32,6 +37,12 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordChangedAt = Date.now() - 1000;
 
+  next();
+});
+
+// Only access those users who are active
+userSchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
   next();
 });
 

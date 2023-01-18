@@ -188,7 +188,18 @@ export const updateMe = async (req: Request, res: Response) => {
     res.status(500).json(error.message);
   }
 };
-export const deleteMe = async (req: Request, res: Response) => {};
+export const deleteMe = async (req: Request, res: Response) => {
+  try {
+    await User.findByIdAndUpdate(req.user.id, { active: false });
+
+    res.status(204).json({
+      status: "success",
+      data: null,
+    });
+  } catch (error) {
+    res.status(500).json("Couldn't delete, something went wrong!");
+  }
+};
 
 // generate token
 function generateToken(id: Types.ObjectId) {

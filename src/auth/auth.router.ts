@@ -11,4 +11,4 @@ authRouter.patch("/resetPassword/:token", authController.resetPassword);
 
 authRouter.patch("/updatePassword", protect, authController.updatePassword);
 authRouter.patch("/updateMe", protect, authController.updateMe);
-authRouter.patch("/deleteMe", protect, authController.deleteMe);
+authRouter.delete("/deleteMe", protect, authController.deleteMe);
