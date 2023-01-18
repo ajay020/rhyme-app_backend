@@ -40,6 +40,8 @@ userSchema.pre("save", async function (next) {
 userSchema.method(
   "correctPassword",
   async function (candidatePassword: string, userPassword: string) {
+    console.log(candidatePassword, userPassword);
+
     return await bcrypt.compare(candidatePassword, userPassword);
   }
 );
@@ -48,10 +50,11 @@ userSchema.method(
   "changedPasswordAfter",
   function (JWTTimestamp: number | undefined) {
     if (this.passwordChangedAt) {
-      let changedAt = `${this.passwordChangedAt.getTime() / 1000}`; // convert to UTC seconds
-      const changedTimestamp = parseInt(changedAt, 10);
+      //   let changedAt = `${this.passwordChangedAt.getTime() / 1000}`;
 
-      // console.log(changedTimestamp, JWTTimestamp);
+      const changedTimestamp = this.passwordChangedAt / 1000; // convert to UTC seconds
+
+      //   console.log(changedTimestamp, JWTTimestamp);
 
       if (JWTTimestamp) {
         return JWTTimestamp < changedTimestamp;
