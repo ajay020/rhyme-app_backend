@@ -29,6 +29,7 @@ const limiter = rateLimit({
 });
 
 app.use("/api", limiter);
+app.use(helmet); // set security HTTP headers,
 
 app.use(express.static("images"));
 app.use(express.static("htmls"));
