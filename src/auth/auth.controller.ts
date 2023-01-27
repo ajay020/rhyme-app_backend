@@ -121,11 +121,8 @@ export const resetPassword = async (req: Request, res: Response) => {
     /*-- Done in user model!*/
 
     // 4) Log the user in, send JWT
-    const token = generateToken(user._id);
-    res.status(200).json({
-      status: "success",
-      token,
-    });
+
+    createSendToken(req.user, 200, res);
   } catch (error: any) {
     res.status(500).json(error.message);
   }
@@ -211,6 +208,27 @@ function generateToken(id: Types.ObjectId) {
   });
   return token;
 }
+
+const createSendToken = (
+  user: HydratedDocument<IUser>,
+  statusCode: number,
+  res: Response
+) => {
+  const token = generateToken(user._id);
+
+  // send token in cookies
+
+  const JWT_COOKIE_EXPIRES_IN = 90; // 90 days
+  const cookieOptions = {
+    expires: new Date(Date.now() + JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+    httpOnly: true,
+    secure: false,
+  };
+
+  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
+
+  res.cookie("jwt", token, cookieOptions);
+};
 
 // const filterObj = (obj: Partial<IUser>, ...allowedFields: string[]) => {
 //   let newObj: Partial<IUser> = {};
