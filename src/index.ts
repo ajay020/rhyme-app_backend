@@ -22,20 +22,20 @@ if (!process.env.PORT) {
 
 const PORT: number = parseInt(process.env.PORT, 10) || 8000;
 
-const limiter = rateLimit({
-  max: 3,
-  windowMs: 60 * 60 * 1000,
-  message: "Too many request from this IP. Please try again in an hour.",
-});
+// const limiter = rateLimit({
+//   max: 3,
+//   windowMs: 60 * 60 * 1000,
+//   message: "Too many request from this IP. Please try again in an hour.",
+// });
 
-app.use("/api", limiter);
+app.use(cors());
+// app.use("/api", limiter);
 app.use(helmet()); // set security HTTP headers,
 
 app.use(express.static("images"));
 app.use(express.static("htmls"));
 
 app.use(express.json({ limit: "10kb" })); //limit the body size
-app.use(cors());
 app.use(express.json());
 app.use(requestLogger);
 app.use("/api/items", itemsRouter);
