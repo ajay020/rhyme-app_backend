@@ -48,7 +48,7 @@ export const updatePoem = async (req: Request, res: Response) => {
       return res.status(404).json("Resource not found");
     }
 
-    if (currUser.id !== poem.author) {
+    if (currUser.id !== poem.author?._id.toString()) {
       return res.status(403).json("You can't delete others poem.");
     }
 
