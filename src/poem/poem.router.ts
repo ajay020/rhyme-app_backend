@@ -1,20 +1,19 @@
 import express from "express";
 import { protect } from "../middleware/protect.middleware";
-import * as poemController from './poem.controller';
+import * as poemController from "./poem.controller";
 
 export const poemRouter = express.Router();
 
 poemRouter
-    .route("/")
-    .get(poemController.getAllPoems)
-    .post(protect, poemController.createPoem);
-
+  .route("/")
+  .get(poemController.getAllPoems)
+  .post(protect, poemController.createPoem);
 
 poemRouter
-    .route("/:id")
-    .put(protect, poemController.updatePoem)
-    .delete(protect, poemController.deletePoem);
-
+  .route("/:id")
+  .get(poemController.getPoemById)
+  .put(protect, poemController.updatePoem)
+  .delete(protect, poemController.deletePoem);
 
 // // GET all poems
 // poemRouter.get("/", poemController.getAllPoems);
