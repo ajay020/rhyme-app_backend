@@ -50,6 +50,7 @@ export const login = async (req: Request, res: Response) => {
       token,
       data: {
         user: {
+          _id: user._id,
           name: user.name,
           email: user.email,
         },
