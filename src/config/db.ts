@@ -1,29 +1,26 @@
-import mongoose  from "mongoose";
+import mongoose from "mongoose";
 
-export const configureDB = () =>{
-    mongoose.set('strictQuery', false);
-    const mongodb_url = process.env.MONGODB_URL;
+export const configureDB = () => {
+  mongoose.set("strictQuery", false);
+  const mongodb_url = process.env.MONGODB_URL;
 
-    if(!mongodb_url){
-        process.exit(1);
-    }
+  if (!mongodb_url) {
+    process.exit(1);
+  }
 
-    mongoose.connect(mongodb_url, 
-        {
-          //No More Deprecation Warning Options in Mongoose 6
-       //- these are no longer supported options in Mongoose 6 - only use it with old versions
-         //useNewUrlParser: true,
-         //useUnifiedTopology: true,
-         //useCreateIndex: true,
-         //useFindAndModify: false
-        })
-    .then(()=>{
-        console.log('Connected to MONGODB');
+  mongoose
+    .connect(mongodb_url, {
+      //No More Deprecation Warning Options in Mongoose 6
+      //- these are no longer supported options in Mongoose 6 - only use it with old versions
+      //useNewUrlParser: true,
+      //useUnifiedTopology: true,
+      //useCreateIndex: true,
+      //useFindAndModify: false
     })
-    .catch((e: any)=>{
-        console.log("Something went wrong", e);
+    .then(() => {
+      console.log("Connected to MONGODB");
     })
-    // cJbouwCfMJw4mzZN  <= db password
-    //ajay <= username
-}
-
+    .catch((e: any) => {
+      console.log("Something went wrong", e);
+    });
+};

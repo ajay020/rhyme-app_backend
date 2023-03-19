@@ -4,10 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --pretty --transpile-only src/index.ts"
+    "start": "ts-node-dev --respawn --pretty --transpile-only src/index.ts"
   },
   "author": "ajay",
   "license": "ISC",
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
