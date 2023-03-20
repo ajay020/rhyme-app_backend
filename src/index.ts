@@ -4,7 +4,6 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 
-import { itemsRouter } from "./items/items.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundMiddleware } from "./middleware/not-found.middleware";
 import { requestLogger } from "./middleware/requestLogger.middleware";
@@ -38,7 +37,6 @@ app.use(express.static("htmls"));
 app.use(express.json({ limit: "10kb" })); //limit the body size
 app.use(express.json());
 app.use(requestLogger);
-app.use("/api/items", itemsRouter);
 app.use("/api/poem", poemRouter);
 app.use("/api/auth", authRouter);
 
