@@ -45,3 +45,5 @@ app.use(notFoundMiddleware);
 
 /** Server Activation */
 app.listen(PORT, () => console.log("Server started on PORT " + PORT));
+
+module.exports = app;
